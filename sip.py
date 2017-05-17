@@ -87,14 +87,16 @@ def parse_args(argv):
         help='path to the original SIF APK',
     )
 
-    p.add_argument('alias',
-        help='name for the private key used to sign the APK',
-    )
-
     p.add_argument('-o', '--out',
         help='path to the resulting rootpatched APK',
         default=None,
         dest='output',
+    )
+
+    p.add_argument('-s', '--sign',
+        help='sign the APK with jarsigner (required to install it on Android)',
+        default=None,
+        dest='keyalias',
     )
 
     p.add_argument('-k', '--keystore',
@@ -128,18 +130,21 @@ def main(argv):
         log.info("Rebuilding APK %r with apktool", str(out_apk))
         subprocess.call(APKTOOL_CMD + ['build', tempdir, '-o', str(out_apk)])
 
-        log.info("Signing the new APK")
-        sigcmd = list(JARSIGNER_CMD)
+        if args.keyalias:
+            log.info("Signing the new APK")
+            sigcmd = list(JARSIGNER_CMD)
 
-        if args.keystore is not None:
-            sigcmd += ['-keystore', args.keystore]
+            if args.keystore is not None:
+                sigcmd += ['-keystore', args.keystore]
 
-        sigcmd += [str(out_apk)]
+            sigcmd += [str(out_apk)]
 
-        if args.alias is not None:
-            sigcmd += [args.alias]
+            if args.keyalias is not None:
+                sigcmd += [args.keyalias]
 
-        subprocess.call(sigcmd)
+            subprocess.call(sigcmd)
+        else:
+            log.warn("You didn't tell me to sign the APK, you won't be able to install it until you sign it yourself")
 
     log.info("Patching finished. New APK is: %r", str(out_apk))
 
