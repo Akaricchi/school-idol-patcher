@@ -20,7 +20,7 @@ This method requires `jarsigner` to be installed.
 If you have never signed an APK before, you will have to [create a Java keystore](https://www.digitalocean.com/community/tutorials/java-keytool-essentials-working-with-java-keystores) first. When you have a keystore, proceed:
 
 ```
-python3 sif-original.apk -o sif-patched.apk -s your_key_alias -k your_keystore.jks
+python3 sip.py sif-original.apk -o sif-patched.apk -s your_key_alias -k your_keystore.jks
 ```
 
 If everything goes well, you will be asked for your keystore password after some time.
@@ -30,7 +30,7 @@ If everything goes well, you will be asked for your keystore password after some
 You can instruct the script to only patch the APK and not care about signing at all:
 
 ```
-python3 sif-original.apk -o sif-patched.apk
+python3 sip.py sif-original.apk -o sif-patched.apk
 ```
 
 You will then have to sign `sif-patched.apk` yourself. 
