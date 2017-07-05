@@ -122,7 +122,7 @@ def main(argv):
 
     with tempfile.TemporaryDirectory(prefix='sifpatch') as tempdir:
         log.info("Decoding APK %r with apktool", str(sif_apk))
-        subprocess.call(APKTOOL_CMD + ['decode', str(sif_apk), '-fo', tempdir])
+        subprocess.call(APKTOOL_CMD + ['decode', str(sif_apk), '-f', '-o', tempdir])
 
         log.info("Applying patches")
         apply_patches(pathlib.Path(tempdir).resolve())
